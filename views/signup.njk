@@ -23,54 +23,54 @@
                     <h4 class="mt-1 mb-5 pb-1" style="font-family: cursive;"><strong>KFUPM Ride</strong></h4>
                   </div>
         
-                  <form>
+                  <form method="post">
                     <h6 class="mb-4 pb-2 pb-md-0 mb-md-4">Registration Form</h3>
+                    <p style="color: red">{{error}}</p>
                     <div class="col-12 mb-2">
                       <div class="form-outline mb-2">
-                        <input type="text" id="firstName" class="form-control form-control-lg" />
+                        <input type="text" id="firstName" class="form-control form-control-lg" name="firstName" value='{{user.firstName}}' required minlength="3"/>
                         <label class="form-label" for="firstName">First Name</label>
-                        <input type="text" id="lastName" class="form-control form-control-lg" />
+                        <input type="text" id="lastName" class="form-control form-control-lg" name="lastName" value='{{user.lastName}}' required minlength="2"/>
                         <label class="form-label" for="lastName">Last Name</label>
                       </div>
                     </div>
 
                     <div class="col-12  mb-2">
-                      <input type="date" class="form-control form-control-lg" id="birthdayDate" />
+                      <input type="date" class="form-control form-control-lg" id="birthdayDate" name="birthDate" value='{{user.birthDate}}' required min="1900-01-01"/>
                       <label for="birthdayDate" class="form-label">Birthday</label>
                     </div>
         
                     <div class="form-outline mb-2">
                       <input type="email" id="newEmail" class="form-control"
-                        placeholder="example@example.com" />
+                        placeholder="example@example.com" value='{{user.email}}' name="email" required />
                       <label class="form-label" for="newEmail">Email</label>
                     </div>
         
                     <div class="form-outline mb-2">
                       <input type="tel" id="phoneNumber" class="form-control"
-                      placeholder="05xxxxxxxx" />
+                      placeholder="05xxxxxxxx" name="phone" value='{{user.phone}}' required minlength="10" maxlength="10"/>
                       <label class="form-label" for="phoneNumber">Phone Number</label>
                     </div>
         
                     <div class="form-outline mb-2">
-                      <input type="password" id="newPassword" class="form-control" />
+                      <input type="password" id="newPassword" class="form-control" name="password" required minlength="8"/>
                       <label class="form-label" for="newPassword">Password</label>
                     </div>
 
                     <div class="form-check d-flex justify-content-center mb-5">
-                      <input class="form-check-input me-2" type="checkbox" value="" id="termsOfService" />
+                      <input class="form-check-input me-2" type="checkbox" value="" id="termsOfService" name="check" required/>
                       <label class="form-check-label" for="termsOfService">
                         I agree all statements in <a href="notSupportedFeature.html">Terms of service</a>
                       </label>
                     </div>
-
                     <div class="text-center pt-1 mb-4 pb-1">
-                      <a class="transfers" href="homePage.html"><button class="btn btn-primary btn-block 
-                      fa-lg gradient-custom-2 mb-3" type="button">Sign Up</button></a></br>
+                      <button type="submit" class="btn btn-primary btn-block 
+                      fa-lg gradient-custom-2 mb-3" type="button">Sign Up</button></br>
                     </div>
         
                     <div class="d-flex align-items-center justify-content-center pb-4">
                       <p class="mb-0 me-2">have already an account?</p>
-                      <a class="transfers" href="login.html"><button type="button" class="btn btn-outline-danger">Log In</button></a>
+                      <a class="transfers" href="http://localhost:3000/login"><button type="button" class="btn btn-outline-danger">Log In</button></a>
                     </div>
                   </form>
         

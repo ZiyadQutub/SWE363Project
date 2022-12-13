@@ -3,7 +3,7 @@ const sqlite3 = require('sqlite3')
 
 const getDbConnection = async () => {
     return await sqlite.open({
-        filename: 'data_base.db3',
+        filename: 'data_base.db',
         driver: sqlite3.Database
     })
 }
@@ -24,13 +24,13 @@ const signup = async (fname, lname, password, email, phone, bdate) => {
     try {
         const db = await getDbConnection()
         // TODO: 'or replace' if something goes wrong
-        const adduser = await db.run(`INSERT INTO user(fname, lname, email, phone, bdate) VALUES(\'${fname}\', \'${lname}\', \'${password}\', \'${email}\', \'${phone}\', \'${bdate}\');`)
+        const adduser = await db.run(`INSERT INTO user(fname, lname, password, email, phone, bdate) VALUES(\'${fname}\', \'${lname}\', \'${password}\', \'${email}\', \'${phone}\', \'${bdate}\');`)
         db.close()
     } catch (err) {
-        db.close()
+        console.log(err.message)
         return err.message
     }
-    return true
+    return 'success'
 }
 
 const login = async (email, password) => {
@@ -38,9 +38,8 @@ const login = async (email, password) => {
         const db = await getDbConnection()
         const pass = await db.get(`SELECT password FROM user WHERE email =${email};`)
         db.close()
-    return pass === password
+    return 'success'
     } catch (err) {
-        db.close()
         return err.message
     }
 }
@@ -87,3 +86,5 @@ const getUserInfo = async (userId) => {
         return err.message
     }
 }
+
+module.exports = {signup, login, getActiveRides, getRideOffers, getUserInfo, getUserRides}
