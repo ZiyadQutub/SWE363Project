@@ -23,24 +23,24 @@
                       <img class="logo" src="logo.jpg" style="width: 185px;" alt="logo">
                       <h4 class="mt-1 mb-5 pb-1" style="font-family: cursive;"><strong>KFUPM Ride</strong></h4>
                     </div>
-        
-                    <form>
+                    <form method="post">
                       <p>Please login to your account</p>
         
+                    <p style="color: red">{{error}}</p>
                       <div class="form-outline mb-4">
                         <input type="email" id="email" class="form-control"
-                          placeholder="example@example.com" required/>
+                          placeholder="example@example.com" name="userName" value='{{user.userName}}' required/>
                         <label class="form-label" for="email">Email address</label>
                       </div>
         
                       <div class="form-outline mb-4">
-                        <input type="password" id="password" class="form-control" required />
+                        <input type="password" id="password" name="password" class="form-control" required />
                         <label class="form-label" for="password">Password</label>
                       </div>
         
                       <div class="text-center pt-1 mb-5 pb-1">
-                        <a class="transfers" href="homePage.html"><button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button">Log
-                          in</button></br></a>
+                        <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Log
+                          in</button></br>
                         <a class="text-muted" href="notSupportedFeature.html">Forgot password?</a>
                       </div>
         

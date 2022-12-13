@@ -36,9 +36,14 @@ const signup = async (fname, lname, password, email, phone, bdate) => {
 const login = async (email, password) => {
     try {
         const db = await getDbConnection()
-        const pass = await db.get(`SELECT password FROM user WHERE email =${email};`)
+        const pass = await db.get(`SELECT password FROM user WHERE email =\'${email}\';`)
         db.close()
-    return 'success'
+        console.log(pass)
+        console.log(password)
+        if (pass.password === password)
+            return 'success'
+        else
+            return "email or password are not correct"
     } catch (err) {
         return err.message
     }
