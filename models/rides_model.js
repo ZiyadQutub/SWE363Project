@@ -65,7 +65,6 @@ const makeOffer = async (userId, rideId, price) => {
         const offer = await db.run(`INSERT INTO offer(user_id, ride_id, price) VALUES(${userId}, ${rideId}, ${price});`)
         db.close()
     } catch (err) {
-        db.close()
         return err.message
     }
 }
@@ -77,7 +76,6 @@ const getRideOffers = async (rideId) => {
         db.close()
         return offers
     } catch (err) {
-        db.close()
         return err.message
     }
 }
@@ -86,6 +84,7 @@ const getUserRides = async (userId) => {
     try {
         const db = await getDbConnection()
         const rides = await db.all(`SELECT * FROM ride WHERE user_id = ${userId}`)
+        db.close()
         return rides
     } catch (err) {
         return err.message
@@ -96,6 +95,7 @@ const getUserInfo = async (userId) => {
     try{
         const db = await getDbConnection()
         const info = await db.get(`SELECT * FROM user WHERE id=${userId}`)
+        db.close()
         return info
     } catch (err) {
         return err.message
@@ -106,19 +106,21 @@ const getIdFromEmail = async (email) => {
     try {
         const db = await getDbConnection()
         const id = await db.get(`SELECT id FROM user WHERE email=\'${email}\'`)
+        db.close()
         return id.id
     } catch(err) {
         return err.message
     }
 }
 
-const makeRide = async(userId, time, departure, destination, sharedWith) => {
+const createRide = async(userId, time, departure, destination, sharedWith) => {
     try {
         const db = await getDbConnection()
         const addRide = await db.run(`INSERT INTO ride(user_id, time, status, departure, destination, shared_with) VALUES(${userId}, \'${time}\', 'active', \'${departure}\', \'${destination}\', \'${sharedWith}\')`)
+        db.close()
     } catch (err) {
         return err.message
     }
 }
 
-module.exports = {signup, login, getActiveRides, getRideOffers, getUserInfo, getUserRides, getIdFromEmail, makeOffer}
+module.exports = {signup, login, getActiveRides, getRideOffers, getUserInfo, getUserRides, getIdFromEmail, makeOffer, createRide}

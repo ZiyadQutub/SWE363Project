@@ -40,7 +40,27 @@ app.get('/', authenticateToken, async (req, res) => {
     const user = await rides_model.getUserInfo(id)
     console.log(user)
     const name = user.fname + " " + user.lname
-    res.render('homePage.njk', {name: name})
+    res.render('homePage.html', {name: name})
+})
+
+app.post('/', authenticateToken, async (req, res) => {
+    let body = req.body
+
+    if (body.from == "0" || body.to == "0" || body.from == body.to) {
+        const err = "Invalid from/to values"
+        console.log(body)
+        const id = req.body.id
+        const user = await rides_model.getUserInfo(id)
+        const name = user.fname + " " + user.lname
+        return res.render("homepage.html", {name:name, error: err})
+    }
+    let time = 'now'
+    if (body.time!=="now") time = body.dateInput + " " + body.timeInput
+
+    rides_model.createRide(body.id, time, body.from, body.to, body.sharedWith)
+
+    res.send("success")
+
 })
 
 app.get('/login', (req, res) => res.render('login.njk'))

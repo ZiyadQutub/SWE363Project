@@ -91,9 +91,10 @@
                 <div class="card rounded-3 text-black">
                   <div class="row g-0"> 
                     <div class="card-body p-md-5 mx-md-4">
-                      <form method="post">
+                      <form method="post" action="http://localhost:3000">
+                        <p style="color: red">{{error}}</p>
                         <h5>From:</h5>
-                        <select name="from" class="PickUpPoint col-12 mb-5">
+                        <select name="from" class="PickUpPoint col-12 mb-5" >
                         <option value="0">Select your Pick Up Point</option>
                         <option value="King Fahd International Airport">King Fahd International Airport</option>
                         <option value="Dammam Railway Station">Dammam Railway Station</option>
@@ -114,19 +115,19 @@
                       
                         <input id="schedule" type="radio" name="time" value="time">
                         <label for="schedule">Schedule: </label>
-                        <input type="date" id="dateInput" disabled>
-                        <input type="time" id="timeInput" disabled>
+                        <input type="date" name="dateInput" id="dateInput" disabled>
+                        <input type="time" name="timeInput" id="timeInput" disabled>
                         <br>
                         <br>
                         <label>Shared with: </label>
                         <input type="number" value="0" name="sharedWith" min="0" max="5"></input>
                         <br>
                         <div class="text-center pt-1 mb-0 pb-1">
-                        <button type="button" class="btn btn-primary btn-block
-                        fa-lg gradient-custom-2 mb-0">Search for a ride</button>
+                        {# <button type="button" class="btn btn-primary btn-block #}
+                        {# fa-lg gradient-custom-2 mb-0">Search for a ride</button> #}
                         </div>
                         <div class="text-center pt-1 mb-0 pb-1">
-                        <button type="button" class="btn btn-primary btn-block
+                        <button type="submit" class="btn btn-primary btn-block
                         fa-lg gradient-custom-2 mb-3">Request new ride</button>
                         </div> 
                       </form> 
