@@ -30,7 +30,7 @@ const authenticateToken = (req, res, next) => {
         const data = jwt.verify(token, process.env.TOKEN_SECRET)
         console.log(data)
     }catch(err){
-        
+
     }
     next()
 }
@@ -88,6 +88,11 @@ app.post('/signup', async (req, res) => {
         res.render('signup.njk', {user: user, error: status})
     }
 
+})
+
+app.get('/logout', (req, res) => {
+    res.clearCookie("access_token")
+    res.redirect("http://localhost:3000/login")
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
