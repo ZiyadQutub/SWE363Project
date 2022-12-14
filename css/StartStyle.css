@@ -110,6 +110,9 @@
 .sub-menu-link:hover p{
     font-weight: 600;
 }
+#subMenu{
+    z-index: 2000;
+}
 
 footer ul li{
     list-style-type: none;
