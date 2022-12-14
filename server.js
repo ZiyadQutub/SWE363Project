@@ -111,6 +111,11 @@ app.get('/logout', (req, res) => {
     res.redirect("http://localhost:3000/login")
 })
 
+app.get('/driver', authenticateToken, async (req, res) => {
+    const id = req.body.id
+    const ride = await rides_model.getRidesForDriver(id)
+})
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 const generateAccessToken = (id) => {

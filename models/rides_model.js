@@ -62,7 +62,7 @@ const login = async (email, password) => {
 const makeOffer = async (userId, rideId, price) => {
     try {
         const db = await getDbConnection()
-        const offer = await db.run(`INSERT INTO offer(user_id, ride_id, price) VALUES(${userId}, ${rideId}, ${price});`)
+        const offer = await db.run(`INSERT INTO offer(user_id, ride_id, price, status) VALUES(${userId}, ${rideId}, ${price}, 'new');`)
         db.close()
     } catch (err) {
         return err.message
