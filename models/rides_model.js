@@ -112,4 +112,13 @@ const getIdFromEmail = async (email) => {
     }
 }
 
+const makeRide = async(userId, time, departure, destination, sharedWith) => {
+    try {
+        const db = await getDbConnection()
+        const addRide = await db.run(`INSERT INTO ride(user_id, time, status, departure, destination, shared_with) VALUES(${userId}, \'${time}\', 'active', \'${departure}\', \'${destination}\', \'${sharedWith}\')`)
+    } catch (err) {
+        return err.message
+    }
+}
+
 module.exports = {signup, login, getActiveRides, getRideOffers, getUserInfo, getUserRides, getIdFromEmail, makeOffer}
