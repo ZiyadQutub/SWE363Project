@@ -80,10 +80,21 @@ const getRideOffers = async (rideId) => {
     }
 }
 
-const getUserRides = async (userId) => {
+const getRidesHistory = async (userId) => {
     try {
         const db = await getDbConnection()
         const rides = await db.all(`SELECT * FROM ride WHERE user_id = ${userId}`)
+        db.close()
+        return rides
+    } catch (err) {
+        return err.message
+    }
+}
+
+const getRidesForDriver = async (userId) => {
+    try {
+        const db = await getDbConnection()
+        const rides = await db.all(`SELECT * FROM ride WHERE user_id <> ${userId} AND status=\'active\'`)
         db.close()
         return rides
     } catch (err) {
@@ -123,4 +134,4 @@ const createRide = async(userId, time, departure, destination, sharedWith) => {
     }
 }
 
-module.exports = {signup, login, getActiveRides, getRideOffers, getUserInfo, getUserRides, getIdFromEmail, makeOffer, createRide}
+module.exports = {signup, login, getActiveRides, getRideOffers, getUserInfo, getRidesHistory, getIdFromEmail, makeOffer, createRide, getRidesForDriver}
