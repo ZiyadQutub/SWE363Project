@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+    {% block content %}
+    <section class="h-100 gradient-form" style="background-color: #eee;">
+      <div class="container py-5 h-100">
+        <div class="form-outline mb-4">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+              <div class="card rounded-3 text-black">
+                <div class="row g-0"> 
+                  <div class="card-body col-lg-4 col-md-12 mb-4 mb-md-0">
+                    <h5>My rides</h5>
+                    <div class="columns">
+                      {% for ride in rides %}
+                      <div class="container">
+                            <div class="boxes">
+                              <p>A ride from {{ride.departure}} to {{ride.destination}}</p>
+                              <p>Time: {{ride.time}}</p>
+                              <p>status: {{ride.status}}</p>
+                              {% if ride.status=='active' %}
+                              <a href="http://localhost:3000/ride/{{ride.id}}" class="btn btn-primary btn-block
+                              fa-lg gradient-custom-2 mb-3">See offers</a>
+                              {% endif %}
+                            </div>
+                          </div>
+                            {% endfor %}
+                      </div>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endblock %}

@@ -10,13 +10,16 @@ templateEngin.configure('views', {
 app.use(express.static('public'))
 app.use('/login', express.static('public'))
 app.use('/signup', express.static('public'))
+app.use('/ride', express.static('public'))
+app.use('/history', express.static('public'))
 app.use(express.urlencoded({extended: true}))
 const cookieParser = require('cookie-parser')
 app.use(cookieParser())
 
 const rides_model = require('./models/rides_model')
 const jwt = require('jsonwebtoken')
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const { runInNewContext } = require('vm');
 dotenv.config()
 
 const authenticateToken = (req, res, next) => {
@@ -63,7 +66,7 @@ app.post('/', authenticateToken, async (req, res) => {
 
 })
 
-app.get('/login', (req, res) => res.render('login.njk'))
+app.get('/login', (req, res) => res.render('login.html'))
 
 app.post('/login', async (req, res) => {
 
@@ -84,11 +87,11 @@ app.post('/login', async (req, res) => {
         })
         .redirect("http://localhost:3000/")
     } else {
-        res.render('login.njk', {user: user, error: status})
+        res.render('login.html', {user: user, error: status})
     }
 })
 
-app.get('/signup', (req, res) => res.render('signup.njk'))
+app.get('/signup', (req, res) => res.render('signup.html'))
 
 app.post('/signup', async (req, res) => {
     const user = req.body
@@ -101,7 +104,7 @@ app.post('/signup', async (req, res) => {
     if (status==='success') {
         res.redirect('http://localhost:3000/login')
     } else {
-        res.render('signup.njk', {user: user, error: status})
+        res.render('signup.html', {user: user, error: status})
     }
 
 })
@@ -113,7 +116,52 @@ app.get('/logout', (req, res) => {
 
 app.get('/driver', authenticateToken, async (req, res) => {
     const id = req.body.id
-    const ride = await rides_model.getRidesForDriver(id)
+    const user = await rides_model.getUserInfo(id)
+    const name = user.fname + " " + user.lname
+    const rides = await rides_model.getRidesForDriver(id)
+    console.log(rides)
+    res.render('driver.html', {name: name, rides: rides})
+})
+
+app.get('/driver', authenticateToken, async (req, res) => {
+    const id = req.body.id
+    const user = await rides_model.getUserInfo(id)
+    const name = user.fname + " " + user.lname
+    const rides = await rides_model.getRidesForDriver(id)
+    console.log(rides)
+    res.render('driver.html', {name: name, rides: rides})
+})
+
+app.post('/driver', authenticateToken, async (req, res) => {
+    let body = req.body
+    console.log(body)
+    const id = req.body.id
+    const user = await rides_model.getUserInfo(id)
+    const name = user.fname + " " + user.lname
+    rides_model.makeOffer(body.id, body.rideId, body.price);
+    const rides = await rides_model.getRidesForDriver(id)
+    res.render('driver.html', {name: name, rides: rides})
+})
+
+app.get('/history', authenticateToken, async (req, res) => {
+    const id = req.body.id
+    const user = await rides_model.getUserInfo(id)
+    const name = user.fname + " " + user.lname
+    const rides = await rides_model.getRidesHistory(id)
+    console.log(rides)
+    res.render('history.html', {rides: rides, name: name})
+})
+
+app.get('/ride/:id', authenticateToken, async (req, res) => {
+    const id = req.body.id
+    const user = await rides_model.getUserInfo(id)
+    const name = user.fname + " " + user.lname
+    const rideId = req.params.id
+    const ride = await rides_model.getRide(rideId)
+    const offers = await rides_model.getRideOffers(rideId)
+    console.log(offers)
+    console.log(ride)
+    res.render("offersForCustomers.html", {name: name, offers: offers, ride: ride})
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
@@ -121,4 +169,3 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 const generateAccessToken = (id) => {
     return jwt.sign(id, process.env.TOKEN_SECRET)
 }
-
