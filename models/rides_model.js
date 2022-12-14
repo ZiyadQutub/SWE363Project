@@ -1,5 +1,7 @@
 const sqlite = require('sqlite')
 const sqlite3 = require('sqlite3')
+const bcrypt = require('bcrypt')
+const dotenv = require('dotenv')
 
 const getDbConnection = async () => {
     return await sqlite.open({
@@ -7,6 +9,8 @@ const getDbConnection = async () => {
         driver: sqlite3.Database
     })
 }
+
+dotenv.config()
 
 const getActiveRides = async () => {
     try {
@@ -23,8 +27,13 @@ const getActiveRides = async () => {
 const signup = async (fname, lname, password, email, phone, bdate) => {
     try {
         const db = await getDbConnection()
-        // TODO: 'or replace' if something goes wrong
-        const adduser = await db.run(`INSERT INTO user(fname, lname, password, email, phone, bdate) VALUES(\'${fname}\', \'${lname}\', \'${password}\', \'${email}\', \'${phone}\', \'${bdate}\');`)
+        saltRound = process.env.SALT_ROUND
+        
+        const salt = bcrypt.genSaltSync(1*saltRound)
+        const hash = bcrypt.hashSync(password, salt)
+        console.log(salt, hash)
+        const adduser = await db.run(`INSERT INTO user(fname, lname, password, email, phone, bdate, salt) VALUES(\'${fname}\', \'${lname}\', \'${hash}\', \'${email}\', \'${phone}\', \'${bdate}\', \'${salt}\');`)
+        // console.log(pass)
         db.close()
     } catch (err) {
         console.log(err.message)
@@ -38,9 +47,10 @@ const login = async (email, password) => {
         const db = await getDbConnection()
         const pass = await db.get(`SELECT password FROM user WHERE email =\'${email}\';`)
         db.close()
-        console.log(pass)
-        console.log(password)
-        if (pass.password === password)
+
+        const result = bcrypt.compareSync(password, pass.password)
+
+        if (result)
             return 'success'
         else
             return "email or password are not correct"
@@ -92,4 +102,14 @@ const getUserInfo = async (userId) => {
     }
 }
 
-module.exports = {signup, login, getActiveRides, getRideOffers, getUserInfo, getUserRides}
+const getIdFromEmail = async (email) => {
+    try {
+        const db = await getDbConnection()
+        const id = await db.get(`SELECT id FROM user WHERE email=\'${email}\'`)
+        return id.id
+    } catch(err) {
+        return err.message
+    }
+}
+
+module.exports = {signup, login, getActiveRides, getRideOffers, getUserInfo, getUserRides, getIdFromEmail, makeOffer}

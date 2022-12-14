@@ -28,24 +28,19 @@ const authenticateToken = (req, res, next) => {
     }
     try{
         const data = jwt.verify(token, process.env.TOKEN_SECRET)
-        console.log(data)
+        req.body.id = data
     }catch(err){
 
     }
     next()
 }
 
-app.get('/', authenticateToken, (req, res) => {
-    // console.log(req.body.email)
-
-    // cookie = document.cookie
-
-    // if (typeof cookie == undefined) {
-        // res.redirect('localhost:3000/login')
-    // } else {
-        res.render('homePage.html')
-    // }
-
+app.get('/', authenticateToken, async (req, res) => {
+    const id = req.body.id
+    const user = await rides_model.getUserInfo(id)
+    console.log(user)
+    const name = user.fname + " " + user.lname
+    res.render('homePage.njk', {name: name})
 })
 
 app.get('/login', (req, res) => res.render('login.njk'))
@@ -59,8 +54,9 @@ app.post('/login', async (req, res) => {
     const status = await rides_model.login(mail, user.password)
 
     if (status === 'success') {
-        console.log(mail)
-        const token = generateAccessToken(mail)
+        const id = await rides_model.getIdFromEmail(mail)
+        console.log(id)
+        const token = generateAccessToken(id)
         console.log('token generated')
         // document.cookie = `token=${token}`
         res.cookie("access_token", token, {
@@ -97,7 +93,7 @@ app.get('/logout', (req, res) => {
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
-const generateAccessToken = (email) => {
-    return jwt.sign(email, process.env.TOKEN_SECRET)
+const generateAccessToken = (id) => {
+    return jwt.sign(id, process.env.TOKEN_SECRET)
 }
 
