@@ -117,9 +117,24 @@
 footer ul li{
     list-style-type: none;
 }
+@media only screen and (min-width:601px) {
+
+    .columns {
+        column-count: 2;
+    
+    }
+    
+}
+@media only screen and (min-width:993px) {
+    .columns {
+        column-count: 3;
+        padding: 10px;
+    }
+    
+}
 .boxes {
     border: #ccc solid 1px;
     display: inline-block;
     padding: 15px;
-    margin: 15px;
+    margin-top: 15px;
 }
