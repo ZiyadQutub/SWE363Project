@@ -8,31 +8,28 @@
               <div class="card rounded-3 text-black">
                 <div class="row g-0"> 
                   <div class="card-body col-lg-4 col-md-12 mb-4 mb-md-0">
-                    <h5>requests</h5>
+                    <h5>Offers Made</h5>
                     
-                    {% if rides.length == 0 %}
-                    <p>No rides have been requested yet</p>
+                    {% if offers.length==0 %}
+                    <p>You did not offer any rides yet</p>
                     {% else %}
-                    {%for ride in rides%}
+                    {%for offer in offers%}
                     <form class="container" method="post">
                           <div class="boxes">
-                              a ride from <span>{{ride.departure}}</span> to <span>{{ride.destination}}</span>
+                              a ride from <span>{{offer.departure}}</span> to <span>{{offer.destination}}</span>
                               <br>
-                              time: <span>{{ride.time}}</span>
-                              <br>
-                              <br>
-                              <form>
-                                  <p>suggest price</p>
-                                  <input name="price" type="number" min="0" required>
-                              </form> 
+                              time: <span>{{offer.time}}</span>
                               <br>
                               <br>
-                              <button type="submit" name="rideId" value='{{ride.id}}' class="btn btn-primary btn-block
-                              fa-lg gradient-custom-2 mb-3">propose</button>
+                              price offered: {{offer.price}}
+                              
+                              <br>
+                              <br>
+                              status: {{offer.status}}
                           </div>
                         </form>
                       {%endfor%}
-                      {% endif %}
+                      {%endif%}
                     </div> 
                   </div>
                 </div>

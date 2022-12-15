@@ -140,7 +140,7 @@ app.post('/driver', authenticateToken, async (req, res) => {
     const name = user.fname + " " + user.lname
     rides_model.makeOffer(body.id, body.rideId, body.price);
     const rides = await rides_model.getRidesForDriver(id)
-    res.render('driver.html', {name: name, rides: rides})
+    res.redirect('http://localhost:3000/myOffers')
 })
 
 app.get('/history', authenticateToken, async (req, res) => {
@@ -162,6 +162,21 @@ app.get('/ride/:id', authenticateToken, async (req, res) => {
     console.log(offers)
     console.log(ride)
     res.render("offersForCustomers.html", {name: name, offers: offers, ride: ride})
+})
+
+app.post('/ride/:id', authenticateToken, async (req, res) => {
+    const id = req.body.id
+    const accept = await rides_model.acceptOffer(req.body.offerId)
+    res.redirect('/history')
+})
+
+app.get('/myOffers', authenticateToken, async (req, res) => {
+    const id = req.body.id;
+    const user = await rides_model.getUserInfo(id);
+    const name = user.fname + " " + user.lname;
+    const offers = await rides_model.getMyOffers(id);
+    console.log(offers)
+    res.render('OffersFromDriver.html', {name: name, offers: offers})
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

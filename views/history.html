@@ -10,6 +10,9 @@
                   <div class="card-body col-lg-4 col-md-12 mb-4 mb-md-0">
                     <h5>My rides</h5>
                     <div class="columns">
+                      {% if rides.length == 0 %}
+                      <p>No rides have been requested yet</p>
+                      {% else %}
                       {% for ride in rides %}
                       <div class="container">
                             <div class="boxes">
@@ -24,6 +27,7 @@
                           </div>
                             {% endfor %}
                       </div>
+                      {% endif %}
                     </div> 
                   </div>
                 </div>

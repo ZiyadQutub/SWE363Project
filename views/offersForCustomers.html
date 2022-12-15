@@ -9,7 +9,10 @@
                 <div class="row g-0"> 
                   <div class="card-body col-lg-4 col-md-12 mb-4 mb-md-0">
                     <h5>Offers for This Ride</h5>
-
+                    
+                    {% if offers.length==0 %}
+                    <p>No offers from drivers yet</p>
+                    {% else %}
                     {%for offer in offers%}
                     <form class="container" method="post">
                           <div class="boxes">
@@ -22,11 +25,12 @@
                               
                               <br>
                               <br>
-                              <button type="submit" class="btn btn-primary btn-block
+                              <button type="submit" name="offerId" value='{{offer.id}}' class="btn btn-primary btn-block
                               fa-lg gradient-custom-2 mb-3">accept</button>
                           </div>
                         </form>
                       {%endfor%}
+                      {%endif%}
                     </div> 
                   </div>
                 </div>

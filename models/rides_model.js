@@ -94,7 +94,7 @@ const getRidesHistory = async (userId) => {
 const getRidesForDriver = async (userId) => {
     try {
         const db = await getDbConnection()
-        const rides = await db.all(`SELECT * FROM ride WHERE user_id <> ${userId} AND status=\'active\'`)
+        const rides = await db.all(`SELECT * FROM ride WHERE user_id <> ${userId} AND status='active'`)
         db.close()
         return rides
     } catch (err) {
@@ -145,4 +145,34 @@ const getRide = async (rideId) => {
     }
 }
 
-module.exports = {signup, login, getActiveRides, getRideOffers, getUserInfo, getRidesHistory, getIdFromEmail, makeOffer, createRide, getRidesForDriver, getRide}
+const getMyOffers = async (userId) => {
+    try {
+        const db = await getDbConnection()
+        const offers = await db.all(`SELECT o.price, o.status, r.destination, r.departure, r.time FROM offer o, ride r WHERE o.ride_id = r.id AND o.user_id= ${userId}`)
+        console.log(offers)
+        // offers.forEach( async (offer) => {
+        //     let tmpRide = await db.get(`SELECT * FROM ride WHERE id = ${offer.ride_id}`)
+        //     tmpRide['price'] = offer.price
+        //     tmpRide['status'] = offer.status
+        //     ride.push(tmpRide)
+        // })
+        db.close()
+        return offers
+    } catch (err) {
+        return err.message
+    }
+}
+
+const acceptOffer = async (offerId) => {
+    try {
+        const db = await getDbConnection()
+        const offer = await db.get(`SELECT * FROM offer WHERE id = ${offerId}`)
+        const notAccept = await db.run(`UPDATE offer SET status='not accepted' WHERE ride_id=${offer.ride_id}`)
+        const accept = await db.run(`UPDATE offer SET status='accepted' Where id=${offerId}`)
+        const acceptRide = await db.run(`UPDATE ride SET status='accepted' Where id=${offer.ride_id}`)
+    } catch (err) {
+        return err.message
+    }
+}
+
+module.exports = {signup, login, getActiveRides, getRideOffers, getUserInfo, getRidesHistory, getIdFromEmail, makeOffer, createRide, getRidesForDriver, getRide, getMyOffers, acceptOffer}
