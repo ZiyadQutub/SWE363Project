@@ -23,6 +23,7 @@ const { runInNewContext } = require('vm');
 dotenv.config()
 
 const authenticateToken = (req, res, next) => {
+    // res.clearCookie("access_token")
     const token = req.cookies.access_token;
 
     console.log(token)
@@ -62,7 +63,7 @@ app.post('/', authenticateToken, async (req, res) => {
 
     rides_model.createRide(body.id, time, body.from, body.to, body.sharedWith)
 
-    res.send("success")
+    res.redirect("/history")
 
 })
 
